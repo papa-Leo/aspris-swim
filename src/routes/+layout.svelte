@@ -8,6 +8,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<title>Aspris Swim</title>
 </svelte:head>
 
 {@render children()}
