@@ -1,3 +1,51 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/*
+ * Brand tokens — taken from the Aspris Swim logo.
+ * Use them as Tailwind utilities, e.g. bg-cream, text-rose, border-rose/30, font-serif.
+ */
+@theme {
+	--color-cream: #f8f1eb; /* logo background */
+	--color-sand: #efe3d8; /* slightly deeper cream for cards / panels */
+	--color-rose: #b07f7b; /* logo mark + wordmark */
+	--color-rose-dark: #8e605c; /* hover / pressed states, AA text on cream */
+	--color-ink: #2e2624; /* body text — warm near-black */
+
+	--font-serif: 'Caudex', ui-serif, Georgia, serif;
+	--font-sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+	html {
+		@apply bg-cream font-sans text-ink antialiased;
+	}
+
+	h1,
+	h2,
+	h3 {
+		@apply font-serif;
+	}
+
+	::selection {
+		@apply bg-rose text-cream;
+	}
+}
+
+/* Small reusable pieces. Prefer utilities in markup; add here only what repeats a lot. */
+@utility eyebrow {
+	@apply text-xs font-medium tracking-[0.3em] text-rose uppercase;
+}
+
+@utility btn {
+	@apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm tracking-[0.2em] uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-40;
+}
+
+@utility btn-primary {
+	@apply bg-rose text-cream hover:bg-rose-dark;
+}
+
+@utility btn-outline {
+	@apply border border-rose text-rose hover:bg-rose hover:text-cream;
+}
