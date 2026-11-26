@@ -47,7 +47,7 @@
 			<p class="mt-4 text-lg text-ink/70">Your bikini. Your colours. Your style.</p>
 			<a href={resolve('/custom')} class="mt-8 btn btn-primary">Design your custom bikini</a>
 		</div>
-		<ProductImage alt="Custom bikini" tint="#172a4b" class="aspect-square" />
+		<ProductImage alt="Custom bikini" class="aspect-square" />
 	</div>
 </section>
 

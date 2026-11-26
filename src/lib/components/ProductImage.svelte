@@ -9,7 +9,7 @@
 	let {
 		src,
 		alt,
-		tint = '#b07f7b',
+		tint = 'var(--color-rose)',
 		class: className
 	}: { src?: string; alt: string; tint?: string; class?: ClassValue } = $props();
 </script>
@@ -20,8 +20,9 @@
 	{:else}
 		<div
 			class="grid size-full place-items-center"
-			style:background="radial-gradient(circle at 30% 20%, {tint}33, transparent 60%),
-			radial-gradient(circle at 80% 90%, {tint}55, transparent 55%)"
+			style:background="radial-gradient(circle at 30% 20%, color-mix(in srgb, {tint} 20%, transparent),
+			transparent 60%), radial-gradient(circle at 80% 90%, color-mix(in srgb, {tint} 33%, transparent),
+			transparent 55%)"
 			role="img"
 			aria-label={alt}
 		>

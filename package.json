@@ -20,10 +20,16 @@
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
-		"db:studio": "drizzle-kit studio"
+		"db:migrate:local": "wrangler d1 migrations apply aspris-staging --local",
+		"db:migrate:staging": "wrangler d1 migrations apply aspris-staging --remote",
+		"db:migrate:prod": "wrangler d1 migrations apply aspris-prod --remote",
+		"db:seed:local": "wrangler d1 execute aspris-staging --local --file src/lib/server/db/seed.sql",
+		"db:studio": "drizzle-kit studio",
+		"db:studio:local": "drizzle-kit studio --config drizzle.local.config.ts"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@libsql/client": "^0.18.0",
 		"@sveltejs/adapter-cloudflare": "^8.0.2",
 		"@sveltejs/kit": "^3.2.0",
 		"@sveltejs/vite-plugin-svelte": "^7.3.1",

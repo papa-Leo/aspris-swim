@@ -2,9 +2,7 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "aspris-swim",
 	"compatibility_date": "2026-11-25",
-	"compatibility_flags": [
-		"nodejs_als"
-	],
+	"compatibility_flags": ["nodejs_als"],
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
@@ -16,12 +14,14 @@
 		{
 			"binding": "aspris_prod",
 			"database_name": "aspris-prod",
-			"database_id": "65128123-8262-4761-9d3d-a688a749db2a"
+			"database_id": "65128123-8262-4761-9d3d-a688a749db2a",
+			"migrations_dir": "drizzle"
 		},
 		{
 			"binding": "aspris_staging",
 			"database_name": "aspris-staging",
-			"database_id": "7d245385-1912-4b22-8f01-f315826da7b0"
+			"database_id": "7d245385-1912-4b22-8f01-f315826da7b0",
+			"migrations_dir": "drizzle"
 		}
 	]
 }

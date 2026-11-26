@@ -1,17 +1,20 @@
 import { browser } from '$app/env';
-import type { Size, Style } from '#lib/data/catalogue.ts';
+import type { Size } from '#lib/catalogue.ts';
 
 export type CartItem = {
 	/** Unique per combination of options, so the same bikini in two colours is two lines. */
 	key: string;
-	style: Style;
-	/** Colour ids from the catalogue. */
+	/**
+	 * Ids from the database's styles / colours / sizes tables. Only the customer's choices are
+	 * stored here; names and prices are looked up from the database whenever the bag is shown,
+	 * so they're never stale.
+	 */
+	styleId: string;
 	topColour: string;
 	bottomColour: string;
 	topSize: Size;
 	bottomSize: Size;
 	notes: string;
-	price: number;
 	quantity: number;
 };
 
@@ -25,14 +28,13 @@ class Cart {
 	items = $state<CartItem[]>([]);
 
 	count = $derived(this.items.reduce((n, i) => n + i.quantity, 0));
-	subtotal = $derived(this.items.reduce((n, i) => n + i.price * i.quantity, 0));
 
 	constructor() {
 		if (!browser) return;
 		try {
 			// Drop anything saved in an older shape.
 			const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as CartItem[];
-			this.items = saved.filter((i) => i.style && i.topColour && i.bottomColour);
+			this.items = saved.filter((i) => i.styleId && i.topColour && i.bottomColour);
 		} catch {
 			this.items = [];
 		}
@@ -45,7 +47,7 @@ class Cart {
 
 	add(item: Omit<CartItem, 'key' | 'quantity'>, quantity = 1) {
 		const key = [
-			item.style,
+			item.styleId,
 			item.topColour,
 			item.bottomColour,
 			item.topSize,

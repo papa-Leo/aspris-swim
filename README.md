@@ -52,3 +52,34 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
+
+## Local database
+
+`npm run dev` uses a local copy of the `aspris-staging` D1 database (stored in `.wrangler/state`). Set it up once:
+
+```sh
+npm run db:migrate:local   # create tables + triggers (re-run after adding migrations)
+npm run db:seed:local      # starter styles, colours, sizes + a stock row for each (all 0)
+npm run db:studio:local    # browse/edit it at https://local.drizzle.studio
+```
+
+### Using the database in a feature
+
+Server code gets the database from `db()` in `src/lib/server/db/index.ts`. In dev it's the local
+database; when deployed it's `aspris_prod`. Keep queries in a helper under `src/lib/server/` and call
+it from a `+page.server.ts` load or form action:
+
+```ts
+// src/routes/example/+page.server.ts
+import { db } from '#lib/server/db/index.ts';
+import { getUpcomingPopups } from '#lib/server/orders.ts';
+
+export const load = async () => ({ popups: await getUpcomingPopups(db()) });
+```
+
+`src/routes/custom/+page.server.ts` is a working example: it loads the catalogue (styles, prices,
+colours, sizes and stock) with `getCatalogue()` so the builder shows what's in the database and greys
+out sold-out options.
+
+All clothing data (styles and prices, colours, sizes, stock) lives only in the database. Change it
+there, e.g. with `npm run db:studio:local`, rather than in code.
