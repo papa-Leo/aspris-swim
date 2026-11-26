@@ -7,7 +7,7 @@
 	<div class="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-3 md:px-8">
 		<div class="md:col-span-2">
 			<WaveMark class="h-8 w-auto text-rose" />
-			<p class="mt-4 max-w-sm font-serif text-2xl">Swimwear made for you, in your colours.</p>
+			<p class="mt-4 max-w-sm font-serif text-2xl">Here we are, Aspris.</p>
 		</div>
 
 		<div>

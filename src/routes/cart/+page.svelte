@@ -219,7 +219,7 @@
 					{#if hasUnavailable}
 						<p class="mt-2 text-xs text-rose-dark">Unavailable items aren't included.</p>
 					{/if}
-					<p class="mt-2 text-xs text-ink/60">Collected at a pop-up — no shipping.</p>
+					<p class="mt-2 text-xs text-ink/60">Collected at a pop-up event — no shipping.</p>
 
 					{#if hasUnavailable}
 						<p class="mt-8 text-sm text-rose-dark">

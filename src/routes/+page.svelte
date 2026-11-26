@@ -7,7 +7,7 @@
 <!-- Hero -->
 <section class="mx-auto max-w-7xl px-5 pt-10 md:px-8 md:pt-16">
 	<h1 class="text-center text-6xl leading-none tracking-wide text-rose md:text-[7rem]">
-		Here we are Aspris.
+		Here we are, Aspris.
 	</h1>
 
 	<div class="relative mt-8 md:mt-12">
@@ -33,7 +33,7 @@
 <section class="mx-auto max-w-3xl px-5 py-24 text-center md:py-32">
 	<p class="eyebrow">Who we are</p>
 	<h2 class="mt-6 text-3xl leading-snug md:text-5xl">
-		We're Aspris, and we make swimwear that's made to be yours.
+		We're Aspris, and we want your swimwear to be as well.
 	</h2>
 	<a href={resolve('/about')} class="mt-10 btn btn-outline">Our story</a>
 </section>
@@ -44,7 +44,7 @@
 		<div>
 			<WaveMark class="h-8 w-auto text-rose" />
 			<h2 class="mt-6 text-4xl md:text-6xl">Make it yours.</h2>
-			<p class="mt-4 text-lg text-ink/70">Your bikini. Your colours. Your style.</p>
+			<p class="mt-4 text-lg text-ink/70">Customise a bikini to suit you in every way.</p>
 			<a href={resolve('/custom')} class="mt-8 btn btn-primary">Design your custom bikini</a>
 		</div>
 		<ProductImage alt="Custom bikini" class="aspect-square" />
@@ -55,7 +55,7 @@
 <section class="mx-auto max-w-5xl px-5 pt-24 text-center md:pt-32">
 	<p class="eyebrow">What we do</p>
 	<div class="mt-10 grid gap-12 md:grid-cols-3">
-		{#each [{ title: 'Made to order', body: 'Each piece is cut and sewn once you order it — no waste, no overstock.' }, { title: 'Mix your sizes', body: 'Tops and bottoms are sized separately, because bodies are.' }, { title: 'Your colours', body: 'Pick from our palette and build a bikini that is completely you.' }] as point (point.title)}
+		{#each [{ title: 'Local is lekker', body: 'Every piece is hand made in Cape Town because we believe in supporting local artisans.' }, { title: 'Mix your sizes', body: 'Tops and bottoms are sized separately, because bodies are.' }, { title: 'Your colours', body: 'Pick from our palette and build a bikini that is completely you.' }] as point (point.title)}
 			<div>
 				<h3 class="text-2xl">{point.title}</h3>
 				<p class="mt-3 text-sm leading-relaxed text-ink/70">{point.body}</p>

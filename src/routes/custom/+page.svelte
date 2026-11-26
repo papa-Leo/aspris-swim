@@ -98,7 +98,9 @@
 	<div class="text-center">
 		<WaveMark class="mx-auto h-8 w-auto text-rose" />
 		<h1 class="mt-6 text-5xl md:text-7xl">Make it yours.</h1>
-		<p class="mt-4 text-lg text-ink/70">Your bikini. Your colours. Your style.</p>
+		<p class="mt-4 text-lg text-ink/70">
+			Customise your bikini to suit you, in every meaning of the word.
+		</p>
 	</div>
 
 	{#if styles.length === 0 || colours.length === 0 || sizes.length === 0}
@@ -114,6 +116,10 @@
 			</div>
 
 			<div class="space-y-10 rounded-[2rem] bg-sand p-6 md:p-10">
+				<!--
+					Style picker — hidden while there's only one style. The first active style in the
+					database is selected automatically (see `styleId` above). Uncomment when you add more.
+
 				<fieldset>
 					<legend class="text-sm">Style</legend>
 					<div class="mt-3 grid grid-cols-[repeat(auto-fit,minmax(7rem,1fr))] gap-2">
@@ -130,6 +136,7 @@
 						{/each}
 					</div>
 				</fieldset>
+				-->
 
 				<ColourPicker
 					{colours}

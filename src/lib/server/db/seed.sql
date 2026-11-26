@@ -18,16 +18,13 @@ INSERT INTO colours (id, name, hex, sort_order) VALUES
 	('white', 'White', '#f7f4ee', 2),
 	('black', 'Black', '#1a1a1a', 3),
 	('navy', 'Navy', '#172a4b', 4),
-	('brown', 'Brown', '#7a523b', 5),
-	('rose', 'Rose', '#b07f7b', 6)
+	('brown', 'Brown', '#7a523b', 5)
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO sizes (id, sort_order) VALUES
 	('XS', 1),
 	('S', 2),
-	('M', 3),
-	('L', 4),
-	('XL', 5)
+	('M', 3)
 ON CONFLICT (id) DO NOTHING;
 
 -- One stock row per colour × piece × size, all starting at 0. Set real numbers with e.g.

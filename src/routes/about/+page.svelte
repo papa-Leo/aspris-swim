@@ -17,12 +17,12 @@
 			<!-- TODO: replace with her real story -->
 			<p>
 				Aspris started with a simple idea: the perfect bikini is the one you design yourself. Every
-				piece is made to order, in the colours and sizes you choose.
+				piece is made with intention, in the colours and sizes you choose.
 			</p>
-			<h2>Made slowly</h2>
+			<h2>Designed and made locally</h2>
 			<p>
-				We cut and sew each piece once it's ordered, which means less waste and swimwear that's
-				truly made for you.
+				All of our pieces are designed by Mieke, a fashion grad based in Cape Town, and manufactured
+				by local artisans.
 			</p>
 			<h2>Made for every body</h2>
 			<p>Tops and bottoms are sized separately, so you never have to compromise on fit.</p>
