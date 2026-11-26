@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import { elasticOut } from 'svelte/easing';
+	import { scale } from 'svelte/transition';
 	import { cart } from '#lib/cart.svelte.ts';
+	import { prefersReducedMotion } from '#lib/motion/effects.ts';
 	import Logo from './Logo.svelte';
 
 	const links = [
@@ -59,17 +62,35 @@
 			href={resolve('/cart')}
 			class="relative -mr-2 p-2 text-rose"
 			aria-label="Bag, {cart.count} items"
+			data-bag-target
 		>
-			<svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-				<path d="M5 8h14l-1 12H6L5 8z" />
-				<path d="M9 8V6a3 3 0 016 0v2" />
-			</svg>
-			{#if cart.count > 0}
-				<span
-					class="absolute top-0 right-0 grid size-4 place-items-center rounded-full bg-rose text-[10px] text-cream"
+			<!-- Wobbles when something lands in the bag (see #lib/motion/fly-to-bag.ts) -->
+			<span class="block origin-bottom" data-bag-wobble>
+				<svg
+					class="size-6"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.5"
 				>
-					{cart.count}
-				</span>
+					<path d="M5 8h14l-1 12H6L5 8z" />
+					<path d="M9 8V6a3 3 0 016 0v2" />
+				</svg>
+			</span>
+			{#if cart.count > 0}
+				<!-- Re-created on every count change so the badge pops each time -->
+				{#key cart.count}
+					<span
+						class="absolute top-0 right-0 grid size-4 place-items-center rounded-full bg-rose text-[10px] text-cream"
+						in:scale={{
+							start: 0.3,
+							duration: prefersReducedMotion() ? 0 : 600,
+							easing: elasticOut
+						}}
+					>
+						{cart.count}
+					</span>
+				{/key}
 			{/if}
 		</a>
 	</div>

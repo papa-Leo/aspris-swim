@@ -6,6 +6,8 @@
 	import ProductImage from '#lib/components/ProductImage.svelte';
 	import SizePicker from '#lib/components/SizePicker.svelte';
 	import WaveMark from '#lib/components/WaveMark.svelte';
+	import { prefersReducedMotion } from '#lib/motion/effects.ts';
+	import { flyToBag } from '#lib/motion/fly-to-bag.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -26,6 +28,8 @@
 	let bottomSize = $state<Size>();
 	let notes = $state('');
 	let added = $state(false);
+	/** True while the pebble is in flight, so a double-click can't add two bikinis. */
+	let adding = false;
 
 	const ready = $derived(!!style && !!topColour && !!bottomColour && !!topSize && !!bottomSize);
 
@@ -51,18 +55,38 @@
 		if (bottomSize && sizeSoldOut('bottom', bottomColour)(bottomSize)) bottomSize = undefined;
 	});
 
-	function addToBag() {
-		if (!style || !topColour || !bottomColour || !topSize || !bottomSize) return;
-		cart.add({
+	async function addToBag(event: MouseEvent & { currentTarget: HTMLButtonElement }) {
+		if (adding || !style || !topColour || !bottomColour || !topSize || !bottomSize) return;
+		const item = {
 			styleId: style.id,
 			topColour,
 			bottomColour,
 			topSize,
 			bottomSize,
 			notes: notes.trim()
-		});
-		added = true;
-		setTimeout(() => (added = false), 2000);
+		};
+
+		adding = true;
+		try {
+			if (!prefersReducedMotion()) {
+				// Fly from the click point (keyboard "clicks" report 0,0 — use the button's centre).
+				const rect = event.currentTarget.getBoundingClientRect();
+				const fromPointer = event.clientX !== 0 || event.clientY !== 0;
+				await flyToBag({
+					origin: fromPointer
+						? { x: event.clientX, y: event.clientY }
+						: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+					colours: [colourHex(topColour) ?? '#000', colourHex(bottomColour) ?? '#000']
+				});
+			}
+		} finally {
+			// Always add, even if the animation was interrupted — and only now, so the
+			// bag count ticks up the moment the pebble lands.
+			cart.add(item);
+			adding = false;
+			added = true;
+			setTimeout(() => (added = false), 2000);
+		}
 	}
 </script>
 
@@ -147,7 +171,27 @@
 						<span class="text-xl">{style ? formatPrice(style.price) : '—'}</span>
 					</div>
 					<button class="mt-6 btn w-full btn-primary py-4" disabled={!ready} onclick={addToBag}>
-						{added ? 'Added to bag ✓' : 'Book your custom bikini'}
+						<!-- Both labels share one grid cell and slide past each other -->
+						<span class="grid overflow-hidden" aria-live="polite">
+							<span
+								class={[
+									'transition duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] [grid-area:1/1] motion-reduce:translate-y-0',
+									added ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
+								]}
+								aria-hidden={added}
+							>
+								Book your custom bikini
+							</span>
+							<span
+								class={[
+									'transition duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] [grid-area:1/1] motion-reduce:translate-y-0',
+									added ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+								]}
+								aria-hidden={!added}
+							>
+								Added to bag ✓
+							</span>
+						</span>
 					</button>
 				</div>
 			</div>
