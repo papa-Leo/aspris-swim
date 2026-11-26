@@ -15,8 +15,11 @@
 			<ul class="mt-4 space-y-2 text-sm">
 				<li><a class="hover:text-rose" href={resolve('/custom')}>Design your bikini</a></li>
 				<li><a class="hover:text-rose" href={resolve('/about')}>Our story</a></li>
-				<!-- TODO: real social link -->
-				<li><a class="hover:text-rose" href="https://instagram.com">Instagram</a></li>
+				<li>
+					<a class="hover:text-rose" href="https://www.instagram.com/aspris_swim/" target="_blank">
+						Instagram
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
