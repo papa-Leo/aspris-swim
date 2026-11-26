@@ -24,9 +24,3 @@ export const stockKey = (colourId: string, piece: Piece, size: Size) =>
 
 /** Store currency. A shop setting rather than a clothing property, so it stays in code. */
 export const CURRENCY = 'ZAR';
-
-export function formatPrice(minor: number) {
-	return new Intl.NumberFormat('en-ZA', { style: 'currency', currency: CURRENCY }).format(
-		minor / 100
-	);
-}

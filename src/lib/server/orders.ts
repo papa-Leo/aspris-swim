@@ -23,11 +23,31 @@ export type PlaceOrderInput = {
 	items: OrderItemInput[];
 };
 
+/** Everything about a placed order, with names resolved from the database. Used for emails. */
+export type OrderSummary = {
+	reference: string;
+	total: number;
+	currency: string;
+	customer: { email: string; name: string | null };
+	popup: typeof popups.$inferSelect;
+	items: {
+		styleName: string;
+		topColour: string;
+		topSize: Size;
+		bottomColour: string;
+		bottomSize: Size;
+		quantity: number;
+		unitPrice: number;
+		notes: string | null;
+	}[];
+};
+
 export type OrderErrorCode =
-	'invalid_input' | 'out_of_stock' | 'popup_closed' | 'popup_full' | 'unknown';
+	'invalid_input' | 'invalid_email' | 'out_of_stock' | 'popup_closed' | 'popup_full' | 'unknown';
 
 const MESSAGES: Record<OrderErrorCode, string> = {
 	invalid_input: 'Some of your order details are missing or invalid.',
+	invalid_email: 'Please enter a valid email address.',
 	out_of_stock: 'Sorry, one of the colours or sizes in your bag has just sold out.',
 	popup_closed: 'Orders for that pop-up are closed. Please choose another date.',
 	popup_full: 'That pop-up is fully booked. Please choose another date.',
@@ -43,13 +63,26 @@ export class OrderError extends Error {
 	}
 }
 
-/** Pop-ups taking orders today or later, soonest first. */
-export function getUpcomingPopups(db: Db) {
-	return db
-		.select()
+/**
+ * Pop-ups taking orders today or later, soonest first, leaving out fully booked ones.
+ * `spotsLeft` is null when the pop-up has no order limit.
+ */
+export async function getUpcomingPopups(db: Db) {
+	const rows = await db
+		.select({
+			id: popups.id,
+			eventName: popups.eventName,
+			eventDate: popups.eventDate,
+			mapsUrl: popups.mapsUrl,
+			eventUrl: popups.eventUrl,
+			spotsLeft: sql<number | null>`CASE WHEN ${popups.maxOrders} IS NULL THEN NULL
+				ELSE ${popups.maxOrders} - (SELECT count(*) FROM ${orders}
+					WHERE ${orders.popupId} = ${popups.id} AND ${orders.status} != 'cancelled') END`
+		})
 		.from(popups)
 		.where(and(eq(popups.ordersOpen, true), gte(popups.eventDate, sql`date('now')`)))
 		.orderBy(asc(popups.eventDate));
+	return rows.filter((p) => p.spotsLeft === null || p.spotsLeft > 0);
 }
 
 /**
@@ -60,12 +93,12 @@ export function getUpcomingPopups(db: Db) {
  * Styles, colours and sizes must be active in the database, and prices always come from the
  * `styles` table, never from the client.
  */
-export async function placeOrder(db: Db, input: PlaceOrderInput) {
+export async function placeOrder(db: Db, input: PlaceOrderInput): Promise<OrderSummary> {
 	const email = input.email?.trim().toLowerCase();
 	const name = input.name?.trim() || null;
 
 	if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-		throw new OrderError('invalid_input', 'email');
+		throw new OrderError('invalid_email');
 	}
 	if (!Number.isInteger(input.popupId)) throw new OrderError('invalid_input', 'pop-up');
 	if (!input.items?.length) throw new OrderError('invalid_input', 'empty order');
@@ -84,11 +117,11 @@ export async function placeOrder(db: Db, input: PlaceOrderInput) {
 
 	const [styleRows, colourRows, sizeRows] = await db.batch([
 		db
-			.select({ id: styles.id, price: styles.price })
+			.select({ id: styles.id, name: styles.name, price: styles.price })
 			.from(styles)
 			.where(and(inArray(styles.id, styleIds), eq(styles.active, true))),
 		db
-			.select({ id: colours.id })
+			.select({ id: colours.id, name: colours.name })
 			.from(colours)
 			.where(and(inArray(colours.id, colourIds), eq(colours.active, true))),
 		db
@@ -144,7 +177,25 @@ export async function placeOrder(db: Db, input: PlaceOrderInput) {
 					}))
 				)
 			]);
-			return { reference, total, popup };
+			const styleById = new Map(styleRows.map((s) => [s.id, s]));
+			const colourName = new Map(colourRows.map((c) => [c.id, c.name]));
+			return {
+				reference,
+				total,
+				currency: CURRENCY,
+				customer: { email, name },
+				popup,
+				items: input.items.map((item) => ({
+					styleName: styleById.get(item.styleId)?.name ?? item.styleId,
+					topColour: colourName.get(item.topColour) ?? item.topColour,
+					topSize: item.topSize,
+					bottomColour: colourName.get(item.bottomColour) ?? item.bottomColour,
+					bottomSize: item.bottomSize,
+					quantity: item.quantity,
+					unitPrice: unitPrice(item),
+					notes: item.notes?.trim() || null
+				}))
+			};
 		} catch (e) {
 			const message = errorMessage(e);
 			if (message.includes('orders.reference')) continue;

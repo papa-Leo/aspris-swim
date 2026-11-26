@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cart } from '#lib/cart.svelte.ts';
-	import { formatPrice, stockKey, type Piece, type Size } from '#lib/catalogue.ts';
+	import { stockKey, type Piece, type Size } from '#lib/catalogue.ts';
+	import { formatPrice } from '#lib/format.ts';
 	import ColourPicker from '#lib/components/ColourPicker.svelte';
 	import ProductImage from '#lib/components/ProductImage.svelte';
 	import SizePicker from '#lib/components/SizePicker.svelte';

@@ -14,5 +14,13 @@ export default defineConfig({
 			},
 			adapter: adapter()
 		})
-	]
+	],
+	environments: {
+		ssr: {
+			// SvelteKit stops Vite pre-bundling itself in the browser, but not on the server. When the
+			// server pre-bundles it, `fail()` / `error()` / `redirect()` come from a second copy of Kit that
+			// Kit doesn't recognise, so in dev they surface as 500s instead of 400/404 responses.
+			optimizeDeps: { exclude: ['@sveltejs/kit'] }
+		}
+	}
 });

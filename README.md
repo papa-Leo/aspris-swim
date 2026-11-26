@@ -83,3 +83,20 @@ out sold-out options.
 
 All clothing data (styles and prices, colours, sizes, stock) lives only in the database. Change it
 there, e.g. with `npm run db:studio:local`, rather than in code.
+
+## Order emails (Resend)
+
+Checkout sends the customer a confirmation and the shop owner a new-order notification via
+[Resend](https://resend.com). Templates are in `src/lib/server/email/templates.ts`.
+
+| Variable         | What it is                                                                       |
+| ---------------- | -------------------------------------------------------------------------------- |
+| `RESEND_API_KEY` | API key from Resend. Leave blank locally to print emails to the console instead. |
+| `EMAIL_FROM`     | Sender, on a domain verified in Resend, e.g. `Aspris Swim <orders@example.com>`. |
+| `OWNER_EMAIL`    | Receives new-order notifications; customers' replies go here too.                |
+
+- **Local:** add them to `.env` (see `.env.example`), then restart `npm run dev`.
+- **Deployed:** `npx wrangler secret put RESEND_API_KEY` (and the same for the other two).
+
+Emails are sent after the order is saved, so a failed email never loses an order; failures are
+logged, and the customer is told to keep their order number.
