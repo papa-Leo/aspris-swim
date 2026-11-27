@@ -20,11 +20,12 @@
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
-		"db:migrate:local": "wrangler d1 migrations apply aspris-staging --local",
-		"db:migrate:staging": "wrangler d1 migrations apply aspris-staging --remote",
-		"db:migrate:prod": "wrangler d1 migrations apply aspris-prod --remote",
-		"db:seed:local": "wrangler d1 execute aspris-staging --local --file src/lib/server/db/seed.sql",
+		"db:migrate:local": "wrangler d1 migrations apply DB --env staging --local",
+		"db:migrate:staging": "wrangler d1 migrations apply DB --env staging --remote",
+		"db:migrate:prod": "wrangler d1 migrations apply DB --remote",
+		"db:seed:local": "wrangler d1 execute DB --env staging --local --file src/lib/server/db/seed.sql",
 		"db:studio": "drizzle-kit studio",
+		"deploy:staging": "npm run build && wrangler deploy --env staging",
 		"db:studio:local": "drizzle-kit studio --config drizzle.local.config.ts"
 	},
 	"devDependencies": {

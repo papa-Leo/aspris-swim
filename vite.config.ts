@@ -12,7 +12,9 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter()
+			// Local dev uses the "staging" Wrangler environment (see wrangler.jsonc), i.e. the local
+			// copy of the staging database that the db:*:local scripts manage.
+			adapter: adapter({ platformProxy: { environment: 'staging' } })
 		})
 	],
 	environments: {

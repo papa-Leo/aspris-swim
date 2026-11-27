@@ -10,18 +10,31 @@
 	},
 	"workers_dev": true,
 	"preview_urls": true,
+
+	// Production (`wrangler deploy`). Each environment binds its own database as `DB`, so code
+	// always uses env.DB and a staging deploy can never reach production data.
 	"d1_databases": [
 		{
-			"binding": "aspris_prod",
+			"binding": "DB",
 			"database_name": "aspris-prod",
 			"database_id": "65128123-8262-4761-9d3d-a688a749db2a",
 			"migrations_dir": "drizzle"
-		},
-		{
-			"binding": "aspris_staging",
-			"database_name": "aspris-staging",
-			"database_id": "7d245385-1912-4b22-8f01-f315826da7b0",
-			"migrations_dir": "drizzle"
 		}
-	]
+	],
+
+	"env": {
+		// Staging (`wrangler deploy --env staging`) → its own Worker, "aspris-swim-staging".
+		// Local dev (`npm run dev`) also uses this environment, so it runs against the local copy
+		// of the staging database in .wrangler/state.
+		"staging": {
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "aspris-staging",
+					"database_id": "7d245385-1912-4b22-8f01-f315826da7b0",
+					"migrations_dir": "drizzle"
+				}
+			]
+		}
+	}
 }
