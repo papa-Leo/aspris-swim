@@ -178,9 +178,6 @@
 										No longer available — please remove it and choose another option.
 									</p>
 								{/if}
-								{#if item.notes}
-									<p class="mt-1 text-sm text-ink/60 italic">“{item.notes}”</p>
-								{/if}
 								<div class="mt-auto flex items-center justify-between pt-4">
 									<div class="flex items-center rounded-full border border-rose/30">
 										<button

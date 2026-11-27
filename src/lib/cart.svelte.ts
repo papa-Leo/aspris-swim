@@ -14,7 +14,6 @@ export type CartItem = {
 	bottomColour: string;
 	topSize: Size;
 	bottomSize: Size;
-	notes: string;
 	quantity: number;
 };
 
@@ -51,8 +50,7 @@ class Cart {
 			item.topColour,
 			item.bottomColour,
 			item.topSize,
-			item.bottomSize,
-			item.notes
+			item.bottomSize
 		].join(':');
 		const existing = this.items.find((i) => i.key === key);
 		if (existing) existing.quantity += quantity;

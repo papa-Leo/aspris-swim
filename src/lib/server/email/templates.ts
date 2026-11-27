@@ -20,7 +20,7 @@ const theme = {
 	sans: "'Jost', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 };
 
-/** Escape customer-provided text (names, notes) before putting it in HTML. */
+/** Escape customer-provided text (names, emails) before putting it in HTML. */
 function esc(value: string | null | undefined) {
 	return (value ?? '').replace(
 		/[&<>"']/g,
@@ -86,7 +86,6 @@ function itemsTable(order: OrderSummary) {
 <td style="padding:14px 0;border-bottom:1px solid ${theme.sand};vertical-align:top;">
 	<div style="font-family:${theme.serif};font-size:18px;color:${theme.ink};">${esc(item.styleName)} bikini${item.quantity > 1 ? ` × ${item.quantity}` : ''}</div>
 	<div style="font-size:13px;color:${theme.muted};margin-top:2px;">Top: ${esc(item.topColour)}, ${esc(item.topSize)} · Bottom: ${esc(item.bottomColour)}, ${esc(item.bottomSize)}</div>
-	${item.notes ? `<div style="font-size:13px;color:${theme.muted};font-style:italic;margin-top:4px;">“${esc(item.notes)}”</div>` : ''}
 </td>
 <td align="right" style="padding:14px 0 14px 16px;border-bottom:1px solid ${theme.sand};vertical-align:top;white-space:nowrap;">${formatPrice(item.unitPrice * item.quantity)}</td>
 </tr>`
@@ -119,8 +118,7 @@ function itemsText(order: OrderSummary) {
 		.map(
 			(i) =>
 				`- ${i.styleName} bikini${i.quantity > 1 ? ` x${i.quantity}` : ''} (${formatPrice(i.unitPrice * i.quantity)})\n` +
-				`  Top: ${i.topColour}, ${i.topSize} / Bottom: ${i.bottomColour}, ${i.bottomSize}` +
-				(i.notes ? `\n  Note: "${i.notes}"` : '')
+				`  Top: ${i.topColour}, ${i.topSize} / Bottom: ${i.bottomColour}, ${i.bottomSize}`
 		)
 		.join('\n');
 }

@@ -20,7 +20,6 @@ export const load: PageServerLoad = async () => {
 };
 
 const MAX_ITEMS = 20;
-const MAX_NOTES = 500;
 
 /** The bag arrives as JSON from the browser, so check its shape before using it. */
 function parseItems(raw: FormDataEntryValue | null): OrderItemInput[] | null {
@@ -38,15 +37,13 @@ function parseItems(raw: FormDataEntryValue | null): OrderItemInput[] | null {
 		const strings = ['styleId', 'topColour', 'topSize', 'bottomColour', 'bottomSize'] as const;
 		if (!v || strings.some((k) => typeof v[k] !== 'string')) return null;
 		if (typeof v.quantity !== 'number') return null;
-		const notes = typeof v.notes === 'string' ? v.notes.slice(0, MAX_NOTES) : undefined;
 		items.push({
 			styleId: v.styleId as string,
 			topColour: v.topColour as string,
 			topSize: v.topSize as string,
 			bottomColour: v.bottomColour as string,
 			bottomSize: v.bottomSize as string,
-			quantity: v.quantity,
-			notes
+			quantity: v.quantity
 		});
 	}
 	return items;

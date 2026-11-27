@@ -26,7 +26,6 @@
 	let bottomColour = $state<string>();
 	let topSize = $state<Size>();
 	let bottomSize = $state<Size>();
-	let notes = $state('');
 	let added = $state(false);
 	/** True while the pebble is in flight, so a double-click can't add two bikinis. */
 	let adding = false;
@@ -62,8 +61,7 @@
 			topColour,
 			bottomColour,
 			topSize,
-			bottomSize,
-			notes: notes.trim()
+			bottomSize
 		};
 
 		adding = true;
@@ -162,15 +160,6 @@
 					label="Bottom size"
 					isDisabled={sizeSoldOut('bottom', bottomColour)}
 				/>
-
-				<label class="block">
-					<span class="text-sm">Anything else? <span class="text-ink/50">(optional)</span></span>
-					<textarea
-						bind:value={notes}
-						rows="3"
-						class="mt-3 w-full rounded-xl border-rose/30 bg-cream text-sm focus:border-rose focus:ring-rose"
-						placeholder="Fit preferences, coverage, a special occasion…"></textarea>
-				</label>
 
 				<div class="border-t border-rose/20 pt-8">
 					<div class="flex items-baseline justify-between">

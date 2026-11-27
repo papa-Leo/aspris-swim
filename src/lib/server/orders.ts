@@ -13,7 +13,6 @@ export type OrderItemInput = {
 	bottomColour: string;
 	bottomSize: Size;
 	quantity: number;
-	notes?: string;
 };
 
 export type PlaceOrderInput = {
@@ -38,7 +37,6 @@ export type OrderSummary = {
 		bottomSize: Size;
 		quantity: number;
 		unitPrice: number;
-		notes: string | null;
 	}[];
 };
 
@@ -172,8 +170,7 @@ export async function placeOrder(db: Db, input: PlaceOrderInput): Promise<OrderS
 						bottomColourId: item.bottomColour,
 						bottomSize: item.bottomSize,
 						quantity: item.quantity,
-						unitPrice: unitPrice(item),
-						notes: item.notes?.trim() || null
+						unitPrice: unitPrice(item)
 					}))
 				)
 			]);
@@ -192,8 +189,7 @@ export async function placeOrder(db: Db, input: PlaceOrderInput): Promise<OrderS
 					bottomColour: colourName.get(item.bottomColour) ?? item.bottomColour,
 					bottomSize: item.bottomSize,
 					quantity: item.quantity,
-					unitPrice: unitPrice(item),
-					notes: item.notes?.trim() || null
+					unitPrice: unitPrice(item)
 				}))
 			};
 		} catch (e) {
